@@ -12,13 +12,13 @@ is paraphrase of
 regexp.Compile("abbrev(i(a(t(i(o(n?)?)?)?)?)?)?")
 ```
 
-Pattern string can contain odd numbers of "/".
-With pattern split by "/", 
-odd-numbered part is necessary
-and even-numbered part is arbitrary.
+Pattern string can contain odd numbers of "/".<br/>
+With pattern split by "/", <br/>
+odd-numbered part is necessary<br/>
+and even-numbered part is arbitrary.<br/>
 (See Usage for detail.)
 
-Pattern with even numbers of "/" causes an error.
+Pattern with even numbers of "/" causes an error.<br/>
 (If you use MustCompile() or For(), it causes panic.)
 
 ## Usage
