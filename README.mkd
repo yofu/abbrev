@@ -12,6 +12,15 @@ is paraphrase of
 regexp.Compile("abbrev(i(a(t(i(o(n?)?)?)?)?)?)?")
 ```
 
+Pattern string can contain odd numbers of "/".
+With pattern split by "/", 
+odd-numbered part is necessary
+and even-numbered part is arbitrary.
+(See Usage for detail.)
+
+Pattern with even numbers of "/" causes an error.
+(If you use MustCompile() or For(), it causes panic.)
+
 ## Usage
 ```go
 import "github.com/yofu/abbrev"
@@ -34,9 +43,6 @@ or shortly,
 ```go
 abbrev.For("v/ertical/s/plit", "vs") // true
 ```
-
-Pattern with even numbers of "/" causes an error.
-(If you use MustCompile() or For(), it causes panic.)
 
 ## Installation
 
