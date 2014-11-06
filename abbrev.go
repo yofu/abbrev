@@ -42,7 +42,7 @@ func (abb *Abbrev) MatchString(str string) bool {
 	return true
 }
 
-func (abb *Abbrev) All() string {
+func (abb *Abbrev) String() string {
 	return abb.pre + abb.follow
 }
 
