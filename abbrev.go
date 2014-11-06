@@ -48,16 +48,25 @@ func MustCompile(pattern string) *Abbrev {
 // MatchString reports whether the Abbrev matches the string str.
 func (abb *Abbrev) MatchString(str string) bool {
 	pos := 0
+	l := 0
+	length := 0
+	for i := 0; i < abb.size; i++ {
+		length += abb.length[i]
+	}
 match:
 	for i := 0; i < abb.size; i++ {
-		if len(str[pos:]) > abb.length[i] {
+		if len(str[pos:]) > length {
 			return false
 		}
 		if !strings.HasPrefix(str[pos:], abb.pre[i]) {
 			return false
 		}
 		pos += len(abb.pre[i])
+		l = len(abb.follow[i])
 		for j, s := range str[pos:] {
+			if j >= l {
+				continue match
+			}
 			if rune(abb.follow[i][j]) != s {
 				if i == abb.size-1 {
 					return false
