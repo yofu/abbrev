@@ -5,25 +5,6 @@ import (
 	"strings"
 )
 
-func MatchString(pattern string, str string) bool {
-	lis := strings.Split(pattern, "/")
-	if len(lis) != 2 {
-		return false
-	}
-	if len(str) > len(pattern) - 1 {
-		return false
-	}
-	if !strings.HasPrefix(str, lis[0]) {
-		return false
-	}
-	for i, s := range str[len(lis[0]):] {
-		if rune(lis[1][i]) != s {
-			return false
-		}
-	}
-	return true
-}
-
 type Abbrev struct {
 	length int
 	pre    string
@@ -64,3 +45,20 @@ func (abb *Abbrev) MatchString(str string) bool {
 func (abb *Abbrev) All() string {
 	return abb.pre + abb.follow
 }
+
+func MatchString(pattern string, str string) (bool, error) {
+	abb, err := Compile(pattern)
+	if err != nil {
+		return false, err
+	}
+	return abb.MatchString(str), nil
+}
+
+func For(pattern string, str string) bool {
+	abb, err := Compile(pattern)
+	if err != nil {
+		panic("abbrev: Compile(" + pattern + "):" + err.Error())
+	}
+	return abb.MatchString(str)
+}
+
