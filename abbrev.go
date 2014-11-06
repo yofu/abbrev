@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+const (
+	Sep = "/"
+)
+
 type Abbrev struct {
 	expr   string
 	size   int
@@ -16,7 +20,7 @@ type Abbrev struct {
 // Compile parses an abbreviation and returns, if successful,
 // an Abbrev object that can be used to match against test.
 func Compile(pattern string) (*Abbrev, error) {
-	lis := strings.Split(pattern, "/")
+	lis := strings.Split(pattern, Sep)
 	if len(lis)%2 != 0 {
 		return nil, errors.New("syntax error")
 	}
