@@ -6,19 +6,30 @@ import (
 )
 
 type Abbrev struct {
-	length int
-	pre    string
-	follow string
+	expr   string
+	size   int
+	length []int
+	pre    []string
+	follow []string
 }
 
 // Compile parses an abbreviation and returns, if successful,
 // an Abbrev object that can be used to match against test.
 func Compile(pattern string) (*Abbrev, error) {
 	lis := strings.Split(pattern, "/")
-	if len(lis) != 2 {
+	if len(lis)%2 != 0 {
 		return nil, errors.New("syntax error")
 	}
-	return &Abbrev{len(pattern)-1, lis[0], lis[1]}, nil
+	size := int(len(lis)/2)
+	length := make([]int, size)
+	pre := make([]string, size)
+	follow := make([]string, size)
+	for i:=0; i<size; i++ {
+		pre[i] = lis[2*i]
+		follow[i] = lis[2*i+1]
+		length[i] = len(pre[i]) + len(follow[i])
+	}
+	return &Abbrev{pattern, size, length, pre, follow}, nil
 }
 
 // MustCompile is like Compile but panics if the expression cannot be parsed.
@@ -32,15 +43,25 @@ func MustCompile(pattern string) *Abbrev {
 
 // MatchString reports whether the Abbrev matches the string str.
 func (abb *Abbrev) MatchString(str string) bool {
-	if len(str) > abb.length {
-		return false
-	}
-	if !strings.HasPrefix(str, abb.pre) {
-		return false
-	}
-	for i, s := range str[len(abb.pre):] {
-		if rune(abb.follow[i]) != s {
+	pos := 0
+	match:
+	for i:=0; i<abb.size; i++ {
+		if len(str[pos:]) > abb.length[i] {
 			return false
+		}
+		if !strings.HasPrefix(str[pos:], abb.pre[i]) {
+			return false
+		}
+		pos += len(abb.pre[i])
+		for j, s := range str[pos:] {
+			if rune(abb.follow[i][j]) != s {
+				if i == abb.size -1 {
+					return false
+				} else {
+					continue match
+				}
+			}
+			pos++
 		}
 	}
 	return true
@@ -48,17 +69,22 @@ func (abb *Abbrev) MatchString(str string) bool {
 
 // String returns the source text used to compile the abbreviation.
 func (abb *Abbrev) String() string {
-	return strings.Join([]string{abb.pre, abb.follow}, "/")
+	return abb.expr
 }
 
 // Longest returns the longest string which matches the abbreviation.
 func (abb *Abbrev) Longest() string {
-	return strings.Join([]string{abb.pre, abb.follow}, "")
+	var buf []byte
+	for i:=0; i<abb.size; i++ {
+		buf = append(buf, abb.pre[i]...)
+		buf = append(buf, abb.follow[i]...)
+	}
+	return string(buf)
 }
 
 // Shortest returns the shortest string which matches the abbreviation.
 func (abb *Abbrev) Shortest() string {
-	return abb.pre
+	return strings.Join(abb.pre, "")
 }
 
 // MatchString checks whether a textual abbreviation matches the string.
