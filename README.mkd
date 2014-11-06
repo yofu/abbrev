@@ -14,8 +14,8 @@ regexp.Compile("abbrev(i(a(t(i(o(n?)?)?)?)?)?)?")
 
 Pattern string can contain odd numbers of "/".<br/>
 With pattern split by "/", <br/>
-odd-numbered part is necessary<br/>
-and even-numbered part is arbitrary.<br/>
+odd-numbered parts are necessary<br/>
+and even-numbered parts are arbitrary.<br/>
 (See Usage for detail.)
 
 Pattern with even numbers of "/" causes an error.<br/>
