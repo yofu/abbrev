@@ -43,7 +43,15 @@ func (abb *Abbrev) MatchString(str string) bool {
 }
 
 func (abb *Abbrev) String() string {
-	return abb.pre + abb.follow
+	return strings.Join([]string{abb.pre, abb.follow}, "/")
+}
+
+func (abb *Abbrev) Longest() string {
+	return strings.Join([]string{abb.pre, abb.follow}, "")
+}
+
+func (abb *Abbrev) Shortest() string {
+	return abb.pre
 }
 
 func MatchString(pattern string, str string) (bool, error) {
