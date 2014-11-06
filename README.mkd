@@ -1,0 +1,53 @@
+#abbrev
+
+Abbreviation matcher for golang.
+
+##abbrev is abbreviation for abbreviation.
+
+```
+abbrev.Compile("abbrev/iation")
+```
+is paraphrase of
+```
+regexp.Compile("abbrev(i(a(t(i(o(n?)?)?)?)?)?)?")
+```
+
+## Usage
+```go
+import "github.com/yofu/abbrev"
+
+e := abbrev.MustCompile("e/dit")
+e.MatchString("e")    // true
+e.MatchString("ed")   // true
+e.MatchString("edi")  // true
+e.MatchString("edit") // true
+e.MatchString("edt")  // false
+
+wq := abbrev.MustCompile("w/rite/q/uit")
+wq.MatchString("wq")    // true
+wq.MatchString("wrq")   // true
+wq.MatchString("wqu")   // true
+wq.MatchString("wtqt")  // false
+```
+
+or shortly, 
+```go
+abbrev.For("v/ertical/s/plit", "vs") // true
+```
+
+Pattern with even numbers of "/" causes an error.
+(If you use MustCompile() or For(), it causes panic.)
+
+## Installation
+
+```
+$ go get github.com/yofu/abbrev
+```
+
+# License
+
+MIT
+
+# Author
+
+Yoshihiro FUKUSHIMA
