@@ -20,11 +20,11 @@ func Compile(pattern string) (*Abbrev, error) {
 	if len(lis)%2 != 0 {
 		return nil, errors.New("syntax error")
 	}
-	size := int(len(lis)/2)
+	size := int(len(lis) / 2)
 	length := make([]int, size)
 	pre := make([]string, size)
 	follow := make([]string, size)
-	for i:=0; i<size; i++ {
+	for i := 0; i < size; i++ {
 		pre[i] = lis[2*i]
 		follow[i] = lis[2*i+1]
 		length[i] = len(pre[i]) + len(follow[i])
@@ -44,8 +44,8 @@ func MustCompile(pattern string) *Abbrev {
 // MatchString reports whether the Abbrev matches the string str.
 func (abb *Abbrev) MatchString(str string) bool {
 	pos := 0
-	match:
-	for i:=0; i<abb.size; i++ {
+match:
+	for i := 0; i < abb.size; i++ {
 		if len(str[pos:]) > abb.length[i] {
 			return false
 		}
@@ -55,7 +55,7 @@ func (abb *Abbrev) MatchString(str string) bool {
 		pos += len(abb.pre[i])
 		for j, s := range str[pos:] {
 			if rune(abb.follow[i][j]) != s {
-				if i == abb.size -1 {
+				if i == abb.size-1 {
 					return false
 				} else {
 					continue match
@@ -75,7 +75,7 @@ func (abb *Abbrev) String() string {
 // Longest returns the longest string which matches the abbreviation.
 func (abb *Abbrev) Longest() string {
 	var buf []byte
-	for i:=0; i<abb.size; i++ {
+	for i := 0; i < abb.size; i++ {
 		buf = append(buf, abb.pre[i]...)
 		buf = append(buf, abb.follow[i]...)
 	}
@@ -104,4 +104,3 @@ func For(pattern string, str string) bool {
 	}
 	return abb.MatchString(str)
 }
-
