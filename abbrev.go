@@ -59,7 +59,19 @@ match:
 			return false
 		}
 		if !strings.HasPrefix(str[pos:], abb.pre[i]) {
-			return false
+			if i == 0 {
+				return false
+			}
+			find := false
+			for j := 1; j <= pos-len(abb.pre[i-1]); j++ {
+				if strings.HasPrefix(str[pos-j:], abb.pre[i]) {
+					find = true
+					pos -= j
+				}
+			}
+			if !find {
+				return false
+			}
 		}
 		pos += len(abb.pre[i])
 		l = len(abb.follow[i])
